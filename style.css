@@ -23,7 +23,6 @@ body {
 }
 
 .wrapper {
-    height: 50vh;
     background-color: var(--element-color);
     border-radius: 20px;
     display: flex;
@@ -61,4 +60,12 @@ body {
     &:hover {
         background-color: #E1AA74;
     }
+}
+
+.right-answer {
+    background-color: green;
+}
+
+.wrong-answer {
+    background-color: red;
 }

@@ -10,24 +10,68 @@ const options = [
     [ '1 день', '2 недели', '1 месяц', '2 месяца' ]
 ]
 
-const answers = [
-    [ false, false, false, true ],
-    [ false, false, true, false ],
-    [ false, true, false, false ],
-]
+const answers = {
+    0: 'fourth',
+    1: 'third',
+    2: 'second'
+}
 
-let question = document.querySelector('.question')
+const question = document.querySelector('.question')
 const form = document.querySelector('.question__form')
-let firstOption = document.getElementById('firstLabel')
-let secondOption = document.getElementById('secondLabel')
-let thirdOption = document.getElementById('thirdLabel')
-let fourthOption = document.getElementById('fourthLabel')
+const input = document.querySelectorAll('input')
+const firstOptionLabel = document.querySelector('#firstLabel')
+const secondOptionLabel = document.querySelector('#secondLabel')
+const thirdOptionLabel = document.querySelector('#thirdLabel')
+const fourthOptionLabel = document.querySelector('#fourthLabel')
+const button = document.querySelector('button')
+const answerLabel = document.querySelector('.answer')
+const label = document.querySelectorAll('label')
+let chosenOption = null
+let questionNumber = 0
+let chosenInput
 
+const nextQuestion = () => {
+    question.textContent = questions[questionNumber]
+    firstOptionLabel.textContent = options[questionNumber][0]
+    secondOptionLabel.textContent = options[questionNumber][1]
+    thirdOptionLabel.textContent = options[questionNumber][2]
+    fourthOptionLabel.textContent = options[questionNumber][3]
+    answerLabel.textContent = ''
+}
 
-question.textContent = questions[0]
-firstOption.textContent = options[0][0]
-secondOption.textContent = options[0][1]
-thirdOption.textContent = options[0][2]
-fourthOption.textContent = options[0][3]
+const uncheckInput = () => {
+    input[chosenInput].checked = false
+}
 
-console.log(firstOption)
+const removeStyles = () => {
+    label[chosenInput].classList.remove('wrong-answer')
+    label[chosenInput].classList.remove('right-answer')
+}
+
+nextQuestion(questionNumber) 
+
+input.forEach((element, i, arr) => {
+    element.addEventListener('click', () => {
+      chosenOption = arr[i].value
+      chosenInput = i
+    })
+})
+
+button.addEventListener('click', () => {
+    if (chosenOption === answers[0]) {
+        answerLabel.textContent = 'Правильно!'
+        label[chosenInput].classList.add('right-answer')
+        questionNumber++
+        setTimeout(removeStyles, 1000)
+        setTimeout(uncheckInput, 1500)
+        setTimeout(nextQuestion, 1500)      
+    } else {
+        answerLabel.textContent = 'Не правильно'
+        label[chosenInput].classList.add('wrong-answer')
+        questionNumber++
+        setTimeout(removeStyles, 1000)
+        setTimeout(uncheckInput, 1500)
+        setTimeout(nextQuestion, 1500)  
+         
+    }
+})
