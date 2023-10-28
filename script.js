@@ -1,42 +1,61 @@
-const questions = [
-    'Сколько дней предоставляется иностранному студенту по прибытию в Россию для оформления регистрации?',
-    'За сколько времени нужно принести документы для продления учебной визы?',
-    'Сколько дней оформляется приглашение?'
+// не получается выынести в модуль ошибка: Cannot use import statement outside a module
+const QUESTIONS = [
+    {
+        question: 'Сколько дней предоставляется иностранному гражданину для постановки на миграционный учёт (оформления регистрации)?',
+        options: [ '1 день', '3 дня', '5 дней', '7 дней' ],
+        answer: 'fourth',
+        correctCommentary: 'Верно! На оформление регистрации предоставляется 7 рабочих дней с момента заселения в общежитие/квартиру. Именно поэтому этот документ полностью называется "отрывной талон уведомления о прибытии иностранного гражданина в место пребывания".',
+        wrongCommentary: 'Не отгадали. Правильный ответ - 7 дней. Но мы ценим, что вы даёте нам больше времени.'
+    },
+    {
+        question: 'Я не выезжала(а) из России, но получил новый документ. Сколько у меня дней для переоформления регистрации?',
+        options: [ '1 день', '3 дня', '5 дней', '7 дней' ],
+        answer: 'second',
+        correctCommentary: 'Да, так и есть! 3 дня при переоформлении и 7 дней при въезде в Россию из-за границы.',
+        wrongCommentary: 'А вот и неправильно! У вас есть всего 3 дня на это.'
+    },
+    {
+        question: 'Сколько дней оформляется приглашение для визы?',
+        options: [ '1 день', '2 недели', '1 месяц', '2 месяца' ],
+        answer: 'third',
+        correctCommentary: 'Правильно! Один месяц, учитывая составление документов, согласование и оформление.',
+        wrongCommentary: 'Неверно, оно оформляется 1 месяц'
+    }
 ]
-
-const options = [
-    [ '1 день', '3 дня', '5 дней', '7 дней' ],
-    [ '1 день', '1 неделя', '1 месяц', '2 месяца' ],
-    [ '1 день', '2 недели', '1 месяц', '2 месяца' ]
-]
-
-const answers = {
-    0: 'fourth',
-    1: 'third',
-    2: 'second'
-}
 
 const question = document.querySelector('.question')
-const form = document.querySelector('.question__form')
 const input = document.querySelectorAll('input')
 const firstOptionLabel = document.querySelector('#firstLabel')
 const secondOptionLabel = document.querySelector('#secondLabel')
 const thirdOptionLabel = document.querySelector('#thirdLabel')
 const fourthOptionLabel = document.querySelector('#fourthLabel')
 const button = document.querySelector('button')
-const answerLabel = document.querySelector('.answer')
+const commentary = document.querySelector('.commentary')
 const label = document.querySelectorAll('label')
-let chosenOption = null
-let questionNumber = 0
-let chosenInput
+const result = document.querySelector('.content')
 
-const nextQuestion = () => {
-    question.textContent = questions[questionNumber]
-    firstOptionLabel.textContent = options[questionNumber][0]
-    secondOptionLabel.textContent = options[questionNumber][1]
-    thirdOptionLabel.textContent = options[questionNumber][2]
-    fourthOptionLabel.textContent = options[questionNumber][3]
-    answerLabel.textContent = ''
+let questionNumberLabel = document.querySelector('.question-number')
+let chosenOption = ''
+let questionNumber = 0
+let chosenInput = ''
+let progress = 0
+
+// Почему если переписываю на стандартную функцию, то не работает в блоке setTimeout?
+const getNextQuestion = () => {
+    if (questionNumber <= QUESTIONS.length - 1) {
+        questionNumberLabel.textContent = `${questionNumber + 1} из ${QUESTIONS.length} вопросов`
+        question.textContent = QUESTIONS[questionNumber].question
+        // Если блоки похожие, то нужно ли обходить циклом?
+        firstOptionLabel.textContent = QUESTIONS[questionNumber].options[0]
+        secondOptionLabel.textContent = QUESTIONS[questionNumber].options[1]
+        thirdOptionLabel.textContent = QUESTIONS[questionNumber].options[2]
+        fourthOptionLabel.textContent = QUESTIONS[questionNumber].options[3]
+        commentary.textContent = ''
+    } else {
+        result.innerHTML = `<p>
+                             У вас ${progress} правильных ответа из ${QUESTIONS.length} вопросов
+                          </p>`
+    }
 }
 
 const uncheckInput = () => {
@@ -48,7 +67,7 @@ const removeStyles = () => {
     label[chosenInput].classList.remove('right-answer')
 }
 
-nextQuestion(questionNumber) 
+getNextQuestion(questionNumber)
 
 input.forEach((element, i, arr) => {
     element.addEventListener('click', () => {
@@ -57,21 +76,23 @@ input.forEach((element, i, arr) => {
     })
 })
 
+// Тоже похожие блоки, нужно выносить в функцию для минимизации кода?
 button.addEventListener('click', () => {
-    if (chosenOption === answers[0]) {
-        answerLabel.textContent = 'Правильно!'
+    if (chosenOption === QUESTIONS[questionNumber].answer) {
+        commentary.textContent = QUESTIONS[questionNumber].correctCommentary
         label[chosenInput].classList.add('right-answer')
+        progress++
         questionNumber++
         setTimeout(removeStyles, 1000)
         setTimeout(uncheckInput, 1500)
-        setTimeout(nextQuestion, 1500)      
+        setTimeout(getNextQuestion, 2500)      
     } else {
-        answerLabel.textContent = 'Не правильно'
+        console.log(chosenOption)
+        commentary.textContent = QUESTIONS[questionNumber].wrongCommentary
         label[chosenInput].classList.add('wrong-answer')
         questionNumber++
         setTimeout(removeStyles, 1000)
         setTimeout(uncheckInput, 1500)
-        setTimeout(nextQuestion, 1500)  
-         
+        setTimeout(getNextQuestion, 2500)    
     }
 })
