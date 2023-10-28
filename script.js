@@ -38,6 +38,7 @@ let questionNumberLabel = document.querySelector('.question-number')
 let chosenOption = ''
 let questionNumber = 0
 let chosenInput = ''
+let progressBar = document.querySelector('#progress-bar')
 let progress = 0
 
 // Почему если переписываю на стандартную функцию, то не работает в блоке setTimeout?
@@ -57,6 +58,10 @@ const getNextQuestion = () => {
                           </p>`
     }
 }
+
+const showProgress = () => {
+    progressBar.value = questionNumber
+} 
 
 const uncheckInput = () => {
     input[chosenInput].checked = false
@@ -84,14 +89,15 @@ button.addEventListener('click', () => {
         progress++
         questionNumber++
         setTimeout(removeStyles, 1000)
+        setTimeout(showProgress, 1000)
         setTimeout(uncheckInput, 1500)
         setTimeout(getNextQuestion, 2500)      
     } else {
-        console.log(chosenOption)
         commentary.textContent = QUESTIONS[questionNumber].wrongCommentary
         label[chosenInput].classList.add('wrong-answer')
         questionNumber++
         setTimeout(removeStyles, 1000)
+        setTimeout(showProgress, 1000)
         setTimeout(uncheckInput, 1500)
         setTimeout(getNextQuestion, 2500)    
     }
