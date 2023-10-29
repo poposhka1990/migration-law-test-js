@@ -12,7 +12,7 @@
             <div class="header">
                 <p class="question-number"></p>
                 <progress id="progress-bar" max="3" value="0"></progress>
-                <p class="question">Вопрос №1</p>
+                <p class="question"></p>
                 <p class="description">Выберите правильный ответ:</p>
             </div>
             <form class="question__form">
@@ -20,29 +20,24 @@
                     <input type="radio" id="first" name="answer" value="first">
                     <label for="first" id="firstLabel">Первый вариант</label>
                 </div>
-
                 <div class="question__form_answer">
                     <input type="radio" id="second" name="answer" value="second">
                     <label for="second" id="secondLabel">Второй вариант</label>
                 </div>
-
                 <div class="question__form_answer">
                     <input type="radio" id="third" name="answer" value="third">
                     <label for="third" id="thirdLabel">Третий вариант</label>
                 </div>
-
                 <div class="question__form_answer">
                     <input type="radio" id="fourth" name="answer" value="fourth">
                     <label for="fourth" id="fourthLabel">Четвертый вариант</label>
                 </div>
-
                 <p class="commentary"></p>
-
                 <button type="button" class="button">Выбрать</button>
             </form>
         </div>
     </main>
-    <script src="./script.js"></script>
     <script type="module" src="./questions.js"></script>
+    <script type="module" src="./script.js"></script>
 </body>
 </html>
